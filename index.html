@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- Disable zoom -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Cat Clicker</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -19,9 +19,11 @@
 
     <main class="main">
       <section class="center">
-        <!-- Your custom button -->
+        <!-- Large central clickable button -->
         <div id="catButton" class="cat-button" title="Tap the cat!">
-          <img id="catImg" src="https://i.ibb.co/8g94X6KX/your-button.png" alt="click button"/>
+          <img id="catImg" src="cat.png" alt="cat button" draggable="false">
+          <!-- glow ring -->
+          <div class="ring" aria-hidden="true"></div>
         </div>
 
         <div class="click-info">
@@ -31,8 +33,8 @@
           <div class="tiny">Tap the button or press <kbd>Space</kbd></div>
         </div>
 
-        <!-- Container for floating +X texts -->
-        <div id="floatContainer" class="float-container"></div>
+        <!-- Floating numbers & falling cats container -->
+        <div id="effects" class="effects-layer" aria-hidden="true"></div>
       </section>
 
       <aside class="shop">
