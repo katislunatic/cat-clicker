@@ -21,43 +21,31 @@ body{
   background-size: cover;
   background-position: center;
   color: #e6eef6;
-  overflow-x: hidden; /* prevent horizontal scroll */
+  overflow-x: hidden;
 }
 
-/* App wrapper for sliding */
-#app {
-  width:100%;
-  max-width:1100px;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-  transition: transform 0.6s cubic-bezier(.4,.0,.2,1); /* smooth slide */
+/* Wrapper for sliding */
+.main-wrapper {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
   position: relative;
 }
 
-/* Slide left when shop is open */
+/* App container slides left to reveal shop */
+#app {
+  display: flex;
+  transition: transform 0.6s cubic-bezier(.4,.0,.2,1);
+  width: calc(100% + 360px); /* extra for shop */
+}
 #app.shop-open {
-  transform: translateX(-360px); /* same width as shop */
+  transform: translateX(-360px);
 }
 
-/* Topbar */
-.topbar{
-  display:flex; justify-content:space-between; align-items:center;
-  padding:14px; border-radius:var(--rounded);
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255,255,255,0.03);
-}
-.title{ font-weight:800; font-size:20px; color:var(--accent-2) }
-.stats{text-align:right}
-.big-number{ font-size:22px; font-weight:800 }
-.sub{ color:var(--muted); font-size:13px; margin-top:4px }
-
-/* Main */
-.main{ display:grid; grid-template-columns: 1fr 360px; gap:16px; align-items:start; position:relative; }
-
-/* Center panel (button area) */
-.center{
+/* Center game panel */
+.center {
+  flex: 1;
+  min-width: 0;
   position:relative;
   padding:22px;
   border-radius:var(--rounded);
@@ -110,28 +98,22 @@ body{
 .tiny{ color:var(--muted); font-size:13px }
 
 /* Shop panel */
-.shop{
+.shop {
+  width: 360px;
+  flex-shrink: 0;
+  padding: 12px;
+  box-sizing: border-box;
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius:var(--rounded);
-  padding:12px;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  border:1px solid rgba(255,255,255,0.03);
-  width:360px;
-  position:absolute;
-  top:0;
-  right:-360px; /* hidden offscreen */
-  height:100%;
-  box-sizing:border-box;
-  transition: right 0.6s cubic-bezier(.4,.0,.2,1);
+  border-radius: var(--rounded);
+  border: 1px solid rgba(255,255,255,0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
   overflow-y:auto;
-  z-index: 50;
 }
 
-/* When app slides, shop becomes visible */
-#app.shop-open .shop { right:0; }
-
+/* Shop content */
 .shop-header{ font-weight:800; color:var(--accent-2) }
 .shop-list{ display:flex; flex-direction:column; gap:10px; padding-right:6px }
 .shop-item{ display:flex; align-items:center; gap:8px; padding:8px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); background: rgba(255,255,255,0.01) }
@@ -200,9 +182,8 @@ body{
 }
 #shopToggle:hover { transform: scale(1.1); }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width:900px){
-  .main{ grid-template-columns: 1fr; }
   .center{ min-height:640px }
   .cat-button{ width: 300px; height:300px; border-radius:22px }
   .falling-cat{ width:52px }
