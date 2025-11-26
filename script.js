@@ -1,6 +1,14 @@
-/* Cat Clicker with Bottom-Right Shop Button and Full Slide Effect */
+/* -------------------------------
+   Cat Clicker - Full Script
+   Features:
+   - Main cat click button
+   - Floating numbers & falling cats
+   - Shop slide from bottom-right button
+   - Local storage save/reset
+------------------------------- */
 
 const STORAGE_KEY = "catclicker_v1_v2";
+
 const ITEM_DEFS = [
   { id: "autoPurr", name: "Auto-Purr", desc: "Small auto purrs", baseCost: 10, baseCps: 0.1, emoji: "😺" },
   { id: "catnipFarm", name: "Catnip Farm", desc: "Produces cat points", baseCost: 120, baseCps: 1, emoji: "🌿" },
@@ -8,17 +16,11 @@ const ITEM_DEFS = [
   { id: "meowTeam", name: "Meow Team", desc: "Team of meowing cats", baseCost: 10000, baseCps: 80, emoji: "🎤" }
 ];
 
-const defaultState = {
-  points: 0,
-  clickPower: 1,
-  items: ITEM_DEFS.map(it => ({ id: it.id, amount: 0 })),
-  lastTick: Date.now()
-};
-
+const defaultState = { points: 0, clickPower: 1, items: ITEM_DEFS.map(it => ({ id: it.id, amount: 0 })), lastTick: Date.now() };
 let state = null;
 let tickTimer = null;
 
-/* --- DOM Elements --- */
+// DOM Elements
 const catBtn = document.getElementById('catButton');
 const catImg = document.getElementById('catImg');
 const pointsEl = document.getElementById('catPoints');
@@ -29,53 +31,53 @@ const saveBtn = document.getElementById('saveBtn');
 const resetBtn = document.getElementById('resetBtn');
 const bigClickBoost = document.getElementById('bigClickBoost');
 const effectsLayer = document.getElementById('effects');
+const appWrapper = document.getElementById('app');
 
-/* New shop toggle button */
-let shopToggle = null; // we will create it dynamically
-const shopPanel = document.querySelector('.shop');
-const appWrapper = document.getElementById('app'); // wrap the whole content to slide left
+let shopToggle = null;
 
-/* --- Load / Save --- */
+/* -----------------------------
+   Load/Save State
+----------------------------- */
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     state = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(defaultState));
     if (!state.items || state.items.length !== ITEM_DEFS.length) state.items = ITEM_DEFS.map(it => ({ id: it.id, amount: 0 }));
-  } catch (err) {
-    console.error("Failed to load state:", err);
+  } catch (e) {
     state = JSON.parse(JSON.stringify(defaultState));
   }
 }
 
 function saveState() {
   state.lastTick = Date.now();
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (err) {
-    console.warn(err);
-  }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
 }
 
 function resetState() {
-  if (!confirm("Reset your game? This will clear progress.")) return;
+  if (!confirm("Reset your game? This will clear all progress.")) return;
   localStorage.removeItem(STORAGE_KEY);
   loadState();
   renderAll();
 }
 
-/* --- Game logic --- */
-function getItemCount(id) { const it = state.items.find(x => x.id === id); return it ? it.amount : 0; }
-function getCps() { return ITEM_DEFS.reduce((sum, d) => sum + d.baseCps * getItemCount(d.id), 0); }
-function getCost(def) { const owned = getItemCount(def.id); return Math.floor(def.baseCost * Math.pow(1.15, owned)); }
+/* -----------------------------
+   Game Math
+----------------------------- */
+function getItemCount(id) { return (state.items.find(x => x.id === id) || { amount: 0 }).amount; }
+function getCps() { return ITEM_DEFS.reduce((s,d) => s + d.baseCps * getItemCount(d.id), 0); }
+function getCost(def) { return Math.floor(def.baseCost * Math.pow(1.15, getItemCount(def.id))); }
+
 function formatNumber(v) {
   if (v < 1000) return Math.floor(v).toString();
-  const units = ["K", "M", "B", "T", "Qa", "Qi"];
-  let u = -1, n = v;
-  while (n >= 1000 && u < units.length - 1) { n /= 1000; u++; }
+  const units = ["K","M","B","T","Qa","Qi"];
+  let u = -1; let n = v;
+  while (n >= 1000 && u < units.length-1) { n /= 1000; u++; }
   return `${parseFloat(n.toFixed(2))}${units[u]}`;
 }
 
-/* --- Rendering --- */
+/* -----------------------------
+   Render UI
+----------------------------- */
 function renderAll() {
   pointsEl.textContent = formatNumber(state.points);
   cpsEl.textContent = formatNumber(getCps());
@@ -83,8 +85,7 @@ function renderAll() {
 
   shopList.innerHTML = '';
   ITEM_DEFS.forEach(def => {
-    const cost = getCost(def);
-    const owned = getItemCount(def.id);
+    const cost = getCost(def), owned = getItemCount(def.id);
     const itemEl = document.createElement('div');
     itemEl.className = 'shop-item';
     itemEl.innerHTML = `
@@ -104,14 +105,15 @@ function renderAll() {
   document.querySelectorAll('.buy').forEach(b => b.addEventListener('click', () => buyItem(b.dataset.id)));
 }
 
-/* --- Buying --- */
+/* -----------------------------
+   Buy Items
+----------------------------- */
 function buyItem(id) {
   const def = ITEM_DEFS.find(d => d.id === id);
   const cost = getCost(def);
   if (state.points < cost) { flashBuyFail(); return; }
   state.points -= cost;
-  const slot = state.items.find(x => x.id === id);
-  slot.amount++;
+  state.items.find(x => x.id === id).amount++;
   renderAll();
   saveState();
 }
@@ -122,7 +124,9 @@ function flashBuyFail() {
   setTimeout(() => { pointsEl.style.transition = ''; pointsEl.style.color = ''; }, 300);
 }
 
-/* --- Click behavior --- */
+/* -----------------------------
+   Clicking the Cat
+----------------------------- */
 function clickCat() {
   state.points += state.clickPower;
   showFloatingNumber(`+${state.clickPower}`);
@@ -145,46 +149,54 @@ function animateButton() {
   setTimeout(() => { ring.style.transition = 'opacity 420ms ease'; ring.style.opacity = '0'; }, 60);
 }
 
+/* -----------------------------
+   Floating Numbers
+----------------------------- */
 function showFloatingNumber(text) {
   const el = document.createElement('div');
   el.className = 'floating-number';
   el.textContent = text;
-
   const btnRect = catBtn.getBoundingClientRect();
   const parentRect = document.querySelector('.center').getBoundingClientRect();
-  const centerX = btnRect.left + btnRect.width / 2 - parentRect.left;
-  const centerY = btnRect.top + btnRect.height * 0.28 - parentRect.top;
+  const centerX = btnRect.left + btnRect.width/2 - parentRect.left;
+  const centerY = btnRect.top + btnRect.height*0.28 - parentRect.top;
   const offsetX = (Math.random() - 0.5) * 80;
   el.style.left = `${centerX + offsetX}px`;
   el.style.top = `${centerY}px`;
-  el.style.fontSize = `${14 + Math.random() * 8}px`;
-
+  el.style.fontSize = `${14 + Math.random()*8}px`;
   effectsLayer.appendChild(el);
   el.addEventListener('animationend', () => el.remove());
 }
 
+/* -----------------------------
+   Falling Cats
+----------------------------- */
 function spawnFallingCat() {
   const img = document.createElement('img');
   img.className = 'falling-cat';
   img.src = 'cat.png';
   img.draggable = false;
-
   const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
   const startX = Math.random() * vw;
   const scale = 0.8 + Math.random() * 1.6;
   img.style.width = `${64 * scale}px`;
-
+  img.style.left = `${startX - (32*scale)}px`;
   const dur = 1400 + Math.random() * 900;
   img.style.animationDuration = `${dur}ms`;
-  img.style.left = `${startX - (32 * scale)}px`;
-
   document.body.appendChild(img);
   setTimeout(() => img.remove(), dur + 80);
 }
 
-/* --- Keyboard & UI --- */
-window.addEventListener('keydown', e => { if (e.code === 'Space') { e.preventDefault(); clickCat(); } });
+/* -----------------------------
+   Keyboard
+----------------------------- */
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') { e.preventDefault(); clickCat(); }
+});
 
+/* -----------------------------
+   Big Click Boost
+----------------------------- */
 bigClickBoost.addEventListener('click', () => {
   const cost = Math.floor(50 * Math.pow(2, state.clickPower - 1));
   if (state.points < cost) { flashBuyFail(); return; }
@@ -194,42 +206,33 @@ bigClickBoost.addEventListener('click', () => {
   saveState();
 });
 
+/* -----------------------------
+   Save & Reset
+----------------------------- */
 saveBtn.addEventListener('click', () => {
-  saveState(); saveBtn.textContent = 'Saved ✓';
+  saveState();
+  saveBtn.textContent = 'Saved ✓';
   setTimeout(() => saveBtn.textContent = 'Save', 1200);
 });
-
 resetBtn.addEventListener('click', resetState);
 catBtn.addEventListener('click', clickCat);
 
-/* --- Create bottom-right shop toggle button dynamically --- */
+/* -----------------------------
+   Shop Toggle Button
+----------------------------- */
 function createShopButton() {
   shopToggle = document.createElement('img');
   shopToggle.src = 'shop-icon.png';
   shopToggle.id = 'shopToggle';
-  shopToggle.style.position = 'fixed';
-  shopToggle.style.bottom = '24px';
-  shopToggle.style.right = '24px';
-  shopToggle.style.width = '80px'; // bigger
-  shopToggle.style.height = '80px';
-  shopToggle.style.cursor = 'pointer';
-  shopToggle.style.zIndex = '100';
   document.body.appendChild(shopToggle);
-
-  shopToggle.addEventListener('click', toggleShop);
+  shopToggle.addEventListener('click', () => {
+    appWrapper.classList.toggle('shop-open');
+  });
 }
 
-/* --- Shop sliding effect --- */
-function toggleShop() {
-  const isOpen = appWrapper.classList.toggle('shop-open');
-  if (isOpen) {
-    shopPanel.style.display = 'block';
-  } else {
-    shopPanel.style.display = 'none';
-  }
-}
-
-/* --- Game Tick --- */
+/* -----------------------------
+   Game Tick (Auto CPS)
+----------------------------- */
 function gameTick() {
   const now = Date.now();
   const dt = (now - state.lastTick) / 1000;
@@ -239,12 +242,14 @@ function gameTick() {
   renderAll();
 }
 
-/* --- Start --- */
+/* -----------------------------
+   Start Game
+----------------------------- */
 function start() {
   loadState();
   renderAll();
-  tickTimer = setInterval(gameTick, 500);
   createShopButton();
+  tickTimer = setInterval(gameTick, 500);
   window.addEventListener('beforeunload', saveState);
 }
 
