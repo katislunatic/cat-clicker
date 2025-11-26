@@ -2,32 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <!-- Disable zoom -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Cat Clicker</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app">
-    <header class="topbar">
-      <div class="title">Cat Clicker</div>
-      <div class="stats">
-        <div id="catPoints" class="big-number">0</div>
-        <div class="sub">Cats · <span id="cps">0</span>/s</div>
-      </div>
-    </header>
-
-    <!-- Shop toggle button -->
-    <button id="shopToggle" class="shop-toggle" title="Open Shop">
-      <img src="shop-icon.png" alt="Shop">
-    </button>
-
-    <main class="main">
+  <main class="main-wrapper">
+    <div id="app">
+      <!-- Game center -->
       <section class="center">
-        <!-- Large central clickable button -->
         <div id="catButton" class="cat-button" title="Tap the cat!">
           <img id="catImg" src="cat.png" alt="cat button" draggable="false">
-          <!-- glow ring -->
           <div class="ring" aria-hidden="true"></div>
         </div>
 
@@ -38,12 +23,11 @@
           <div class="tiny">Tap the button or press <kbd>Space</kbd></div>
         </div>
 
-        <!-- Floating numbers & falling cats container -->
         <div id="effects" class="effects-layer" aria-hidden="true"></div>
       </section>
 
       <!-- Shop panel -->
-      <aside class="shop hidden">
+      <aside class="shop">
         <div class="shop-header">Shop</div>
         <div id="shopList" class="shop-list"></div>
         <div class="controls">
@@ -51,13 +35,10 @@
           <button id="resetBtn" class="btn danger">Reset</button>
         </div>
       </aside>
-    </main>
+    </div>
+  </main>
 
-    <footer class="footer">
-      Built for fun — host on GitHub Pages. Saved to your browser.
-    </footer>
-  </div>
-
+  <!-- Script -->
   <script src="script.js" defer></script>
 </body>
 </html>
