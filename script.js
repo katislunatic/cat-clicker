@@ -1,4 +1,4 @@
-/* Cat Clicker with Slide-Out Shop */
+/* Cat Clicker with Bottom-Right Shop Button and Full Slide Effect */
 
 const STORAGE_KEY = "catclicker_v1_v2";
 const ITEM_DEFS = [
@@ -29,9 +29,11 @@ const saveBtn = document.getElementById('saveBtn');
 const resetBtn = document.getElementById('resetBtn');
 const bigClickBoost = document.getElementById('bigClickBoost');
 const effectsLayer = document.getElementById('effects');
-const shopToggle = document.getElementById('shopToggle');
+
+/* New shop toggle button */
+let shopToggle = null; // we will create it dynamically
 const shopPanel = document.querySelector('.shop');
-const mainPanel = document.querySelector('.main');
+const appWrapper = document.getElementById('app'); // wrap the whole content to slide left
 
 /* --- Load / Save --- */
 function loadState() {
@@ -62,20 +64,9 @@ function resetState() {
 }
 
 /* --- Game logic --- */
-function getItemCount(id) {
-  const it = state.items.find(x => x.id === id);
-  return it ? it.amount : 0;
-}
-
-function getCps() {
-  return ITEM_DEFS.reduce((sum, d) => sum + d.baseCps * getItemCount(d.id), 0);
-}
-
-function getCost(def) {
-  const owned = getItemCount(def.id);
-  return Math.floor(def.baseCost * Math.pow(1.15, owned));
-}
-
+function getItemCount(id) { const it = state.items.find(x => x.id === id); return it ? it.amount : 0; }
+function getCps() { return ITEM_DEFS.reduce((sum, d) => sum + d.baseCps * getItemCount(d.id), 0); }
+function getCost(def) { const owned = getItemCount(def.id); return Math.floor(def.baseCost * Math.pow(1.15, owned)); }
 function formatNumber(v) {
   if (v < 1000) return Math.floor(v).toString();
   const units = ["K", "M", "B", "T", "Qa", "Qi"];
@@ -211,11 +202,32 @@ saveBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', resetState);
 catBtn.addEventListener('click', clickCat);
 
-/* --- Shop toggle --- */
-shopToggle.addEventListener('click', () => {
-  const isOpen = shopPanel.classList.toggle('open');
-  mainPanel.classList.toggle('shifted', isOpen);
-});
+/* --- Create bottom-right shop toggle button dynamically --- */
+function createShopButton() {
+  shopToggle = document.createElement('img');
+  shopToggle.src = 'shop-icon.png';
+  shopToggle.id = 'shopToggle';
+  shopToggle.style.position = 'fixed';
+  shopToggle.style.bottom = '24px';
+  shopToggle.style.right = '24px';
+  shopToggle.style.width = '80px'; // bigger
+  shopToggle.style.height = '80px';
+  shopToggle.style.cursor = 'pointer';
+  shopToggle.style.zIndex = '100';
+  document.body.appendChild(shopToggle);
+
+  shopToggle.addEventListener('click', toggleShop);
+}
+
+/* --- Shop sliding effect --- */
+function toggleShop() {
+  const isOpen = appWrapper.classList.toggle('shop-open');
+  if (isOpen) {
+    shopPanel.style.display = 'block';
+  } else {
+    shopPanel.style.display = 'none';
+  }
+}
 
 /* --- Game Tick --- */
 function gameTick() {
@@ -232,6 +244,7 @@ function start() {
   loadState();
   renderAll();
   tickTimer = setInterval(gameTick, 500);
+  createShopButton();
   window.addEventListener('beforeunload', saveState);
 }
 
