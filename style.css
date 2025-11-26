@@ -1,0 +1,138 @@
+:root{
+  --bg:#0f1724;
+  --card:#0b1220;
+  --accent:#ffb86b;
+  --muted:#99a3b2;
+  --glass: rgba(255,255,255,0.03);
+  --rounded:14px;
+  --glass-2: rgba(255,255,255,0.02);
+  --accent-2: #ffd89b;
+  --shadow: 0 6px 18px rgba(2,6,23,0.6);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  background: linear-gradient(180deg,#071023 0%, #071827 60%), var(--bg);
+  color: #e6eef6;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  display:flex;
+  align-items:stretch;
+  justify-content:center;
+  padding:28px;
+}
+
+#app{
+  width:100%;
+  max-width:1100px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--rounded);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+.title{font-weight:700; font-size:20px; color:var(--accent-2)}
+.stats{ text-align:right }
+.big-number{ font-size:22px; font-weight:700; letter-spacing:0.6px }
+.sub{ color:var(--muted); font-size:13px; margin-top:4px }
+
+.main{
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:18px;
+  align-items:start;
+}
+
+.center{
+  background:var(--glass);
+  padding:22px;
+  border-radius:var(--rounded);
+  min-height:360px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,0.02);
+}
+
+.cat-button{
+  width:260px;
+  height:260px;
+  background:linear-gradient(180deg,#fffdf0,#ffeab9);
+  border-radius:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms;
+  box-shadow: 0 12px 30px rgba(2,6,23,0.5);
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+}
+.cat-button:active{ transform: scale(0.98) rotate(-1deg) }
+
+.cat-svg{ width:60%; height:60%; }
+
+.click-info{ margin-top:14px; text-align:center }
+.pill{ background:var(--glass-2); border-radius:999px; padding:8px 14px; border:1px solid rgba(255,255,255,0.03); color:var(--muted); margin-bottom:6px; cursor:pointer }
+.tiny{ color:var(--muted); font-size:13px }
+
+.shop{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:var(--rounded);
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  border:1px solid rgba(255,255,255,0.03);
+}
+
+.shop-header{ font-weight:700; color:var(--accent-2) }
+
+.shop-list{ display:flex; flex-direction:column; gap:10px; overflow:auto; max-height:560px; padding-right:4px; }
+
+.shop-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.0));
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.02);
+}
+.item-icon{
+  width:46px; height:46px; display:flex; align-items:center; justify-content:center; font-weight:700; border-radius:10px;
+  background: linear-gradient(180deg,#fff,#ffdca8);
+  color:#1b1320;
+  box-shadow: 0 6px 12px rgba(2,6,23,0.45);
+}
+.item-body{ flex:1; }
+.item-name{ font-weight:700; }
+.item-desc{ font-size:12px; color:var(--muted); margin-top:4px }
+.item-right{ display:flex; flex-direction:column; align-items:flex-end; gap:8px }
+.btn{ padding:8px 12px; border-radius:10px; border:0; cursor:pointer; background:linear-gradient(180deg,var(--accent), #ff9b47); color:#111; font-weight:700; }
+.btn.small{ padding:6px 8px; font-size:13px }
+.danger{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted) }
+
+.footer{ color:var(--muted); font-size:13px; text-align:center }
+
+/* responsive */
+@media (max-width:860px){
+  .main{ grid-template-columns: 1fr; }
+  .shop{ order:2 }
+  .center{ order:1 }
+  .cat-button{ width:200px; height:200px }
+}
