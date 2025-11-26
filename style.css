@@ -1,265 +1,169 @@
-:root {
-  --bg: #0f1724;
-  --card: #0b1220;
+:root{
+  --bg-dark: #050507;
   --accent: #ffb86b;
   --muted: #99a3b2;
   --glass: rgba(255,255,255,0.03);
   --rounded: 14px;
-  --glass-2: rgba(255,255,255,0.02);
   --accent-2: #ffd89b;
-  --shadow: 0 6px 18px rgba(2,6,23,0.6);
+  --shadow: 0 10px 30px rgba(0,0,0,0.6);
 }
 
-* { box-sizing: border-box; }
-html, body { height: 100%; margin: 0; }
-
-body {
-  background: linear-gradient(180deg, #071023 0%, #071827 60%), var(--bg);
-  color: #e6eef6;
+/* Reset & base */
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  display: flex;
-  align-items: stretch;
-  justify-content: center;
-  padding: 28px;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  display:flex; align-items:stretch; justify-content:center;
+  padding:24px;
+  /* background uses the image you supplied (dark CC background) */
+  background-image: url('https://cookieclicker.wiki.gg/images/thumb/BgBlack.jpg/320px-BgBlack.jpg');
+  background-color: var(--bg-dark);
+  background-size: cover;
+  background-position: center;
+  color: #e6eef6;
 }
 
-#app {
-  width: 100%;
-  max-width: 1100px;
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
+/* App layout */
+#app{ width:100%; max-width:1100px; display:flex; flex-direction:column; gap:16px; }
 
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px;
+/* Topbar */
+.topbar{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px; border-radius:var(--rounded);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius: var(--rounded);
   box-shadow: var(--shadow);
   border: 1px solid rgba(255,255,255,0.03);
 }
+.title{ font-weight:800; font-size:20px; color:var(--accent-2) }
+.stats{text-align:right}
+.big-number{ font-size:22px; font-weight:800 }
+.sub{ color:var(--muted); font-size:13px; margin-top:4px }
 
-.title {
-  font-weight: 700;
-  font-size: 20px;
-  color: var(--accent-2);
-}
+/* Main */
+.main{ display:grid; grid-template-columns: 1fr 360px; gap:16px; align-items:start; }
 
-.stats {
-  text-align: right;
-}
-
-.big-number {
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.6px;
-}
-
-.sub {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-.main {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 18px;
-  align-items: start;
-}
-
-.center {
-  background: var(--glass);
-  padding: 22px;
-  border-radius: var(--rounded);
-  min-height: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255,255,255,0.02);
-  position: relative; /* for floating +X items */
-}
-
-.cat-button {
-  width: 260px;
-  height: 260px;
-  background: linear-gradient(180deg, #fffdf0, #ffeab9);
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 160ms cubic-bezier(.2, .9, .2, 1), box-shadow 160ms;
-  box-shadow: 0 12px 30px rgba(2,6,23,0.5);
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  position: relative;
-}
-
-.cat-button:active {
-  transform: scale(0.95) rotate(-1deg);
-}
-
-.cat-button img {
-  max-width: 80%;
-  max-height: 80%;
-}
-
-.click-info {
-  margin-top: 14px;
-  text-align: center;
-}
-
-.pill {
-  background: var(--glass-2);
-  border-radius: 999px;
-  padding: 8px 14px;
-  border: 1px solid rgba(255,255,255,0.03);
-  color: var(--muted);
-  margin-bottom: 6px;
-  cursor: pointer;
-}
-
-.tiny {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.shop {
+/* Center panel (button area) */
+.center{
+  position:relative;
+  padding:22px;
+  border-radius:var(--rounded);
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border-radius: var(--rounded);
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
   border: 1px solid rgba(255,255,255,0.03);
+  min-height:520px;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+  overflow:hidden;
 }
 
-.shop-header {
-  font-weight: 700;
-  color: var(--accent-2);
+/* Big central button (Option A: large) */
+.cat-button{
+  width: 420px;
+  height: 420px;
+  border-radius:34px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  position:relative;
+  transform-origin:center;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.6);
+  background: radial-gradient(120px 80px at 50% 35%, rgba(255,255,255,0.12), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.04);
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.shop-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow: auto;
-  max-height: 560px;
-  padding-right: 4px;
+/* cat image inside button */
+.cat-button img{
+  width:50%;
+  height:auto;
+  image-rendering: pixelated; /* keeps sprite crisp */
+  pointer-events:none;
+  transform-origin:center;
+  display:block;
 }
 
-.shop-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.0));
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.02);
+/* ring glow */
+.cat-button .ring{
+  position:absolute;
+  width:86%;
+  height:86%;
+  border-radius:50%;
+  box-shadow: 0 0 0 6px rgba(255,200,130,0.06), 0 0 40px 10px rgba(255,180,80,0.06);
+  opacity:0;
+  transition:opacity 220ms ease;
+  pointer-events:none;
 }
 
-.item-icon {
-  width: 46px;
-  height: 46px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #fff, #ffdca8);
-  color: #1b1320;
-  box-shadow: 0 6px 12px rgba(2,6,23,0.45);
+/* pressed state (JS toggles animation, but keep a CSS fallback) */
+.cat-button:active{ transform: scale(0.98); }
+.cat-button:active .ring{ opacity:0.12; }
+
+/* click-info */
+.click-info{ margin-top:16px; text-align:center }
+.pill{ background:var(--glass); border-radius:999px; padding:8px 14px; border:1px solid rgba(255,255,255,0.03); color:var(--muted); cursor:pointer }
+.tiny{ color:var(--muted); font-size:13px }
+
+/* Sidebar / Shop */
+.shop{ background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:var(--rounded); padding:12px; display:flex; flex-direction:column; gap:12px; border:1px solid rgba(255,255,255,0.03); }
+.shop-header{ font-weight:800; color:var(--accent-2) }
+.shop-list{ display:flex; flex-direction:column; gap:10px; max-height:520px; overflow:auto; padding-right:6px; }
+.shop-item{ display:flex; align-items:center; gap:8px; padding:8px; border-radius:10px; border:1px solid rgba(255,255,255,0.02); background: rgba(255,255,255,0.01) }
+.item-icon{ width:46px; height:46px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#fff,#ffdca8); color:#1b1320; font-weight:800; box-shadow: 0 6px 12px rgba(0,0,0,0.35) }
+.item-body{ flex:1 } .item-name{ font-weight:700 } .item-desc{ font-size:12px; color:var(--muted); margin-top:4px }
+.item-right{ display:flex; flex-direction:column; align-items:flex-end; gap:6px }
+.btn{ padding:8px 12px; border-radius:10px; border:0; cursor:pointer; background: linear-gradient(180deg,var(--accent), #ff9b47); color:#111; font-weight:700 }
+.btn.small{ padding:6px 8px; font-size:13px }
+.danger{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted) }
+
+/* Footer */
+.footer{ color:var(--muted); font-size:13px; text-align:center; padding-bottom:8px }
+
+/* Effects layer (floating numbers + falling cats) */
+.effects-layer{
+  position:absolute;
+  left:0; top:0; right:0; bottom:0;
+  pointer-events:none;
+  overflow:visible;
 }
 
-.item-body {
-  flex: 1;
+/* Floating +X numbers */
+.floating-number{
+  position:absolute;
+  font-weight:900;
+  color:var(--accent-2);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  transform-origin:center;
+  animation: floatUp 900ms cubic-bezier(.2,.8,.2,1) forwards;
+  will-change: transform, opacity;
 }
-
-.item-name {
-  font-weight: 700;
-}
-
-.item-desc {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 4px;
-}
-
-.item-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 8px;
-}
-
-.btn {
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 0;
-  cursor: pointer;
-  background: linear-gradient(180deg, var(--accent), #ff9b47);
-  color: #111;
-  font-weight: 700;
-}
-
-.btn.small {
-  padding: 6px 8px;
-  font-size: 13px;
-}
-
-.danger {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.06);
-  color: var(--muted);
-}
-
-.footer {
-  color: var(--muted);
-  font-size: 13px;
-  text-align: center;
-}
-
-/* Floating +X animation */
-.float-container {
-  position: absolute;
-  pointer-events: none;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.floating-number {
-  position: absolute;
-  font-weight: 700;
-  color: var(--accent-2);
-  user-select: none;
-  animation: floatUp 1s forwards ease-out;
-}
-
 @keyframes floatUp {
-  0% {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(-40px) scale(1.3);
-    opacity: 0;
-  }
+  0% { transform: translateY(0) scale(1); opacity:1 }
+  70% { transform: translateY(-40px) scale(1.18); opacity:0.9 }
+  100% { transform: translateY(-90px) scale(1.3); opacity:0 }
+}
+
+/* Falling cat animation (CSS class controlled) */
+.falling-cat{
+  position:fixed;
+  width:64px; /* will be scaled by JS for variety */
+  height:auto;
+  left:0; top:-80px;
+  pointer-events:none;
+  image-rendering: pixelated;
+  transform-origin:center;
+  will-change: transform, opacity;
+  animation: fallDown linear forwards;
+}
+@keyframes fallDown {
+  0% { transform: translateY(-120vh) rotate(0deg); opacity:1 }
+  85% { opacity:1 }
+  100% { transform: translateY(110vh) rotate(30deg); opacity:0 }
 }
 
 /* responsive */
-@media (max-width: 860px) {
-  .main { grid-template-columns: 1fr; }
-  .shop { order: 2; }
-  .center { order: 1; }
-  .cat-button { width: 200px; height: 200px; }
+@media (max-width:900px){
+  .main{ grid-template-columns: 1fr; }
+  .shop{ order:2; margin-top:8px }
+  .center{ order:1; min-height:640px }
+  .cat-button{ width: 300px; height:300px; border-radius:22px }
+  .falling-cat{ width:52px }
 }
