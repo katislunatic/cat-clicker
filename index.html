@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Cat Clicker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="title">Cat Clicker</div>
+      <div class="stats">
+        <div id="catPoints" class="big-number">0</div>
+        <div class="sub">Cats · <span id="cps">0</span>/s</div>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="center">
+        <div id="catButton" class="cat-button" title="Tap the cat!">
+          <!-- Inline SVG cat -->
+          <svg viewBox="0 0 120 120" class="cat-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="cat">
+            <g id="catBody">
+              <ellipse cx="60" cy="70" rx="36" ry="28" fill="#F6D7A7"/>
+              <circle cx="44" cy="52" r="10" fill="#F6D7A7"/>
+              <circle cx="76" cy="52" r="10" fill="#F6D7A7"/>
+              <path d="M36 40 Q30 20 44 28" fill="#F6D7A7"/>
+              <path d="M84 40 Q90 20 76 28" fill="#F6D7A7"/>
+              <ellipse cx="52" cy="60" rx="4" ry="6" fill="#111"/>
+              <ellipse cx="68" cy="60" rx="4" ry="6" fill="#111"/>
+              <path d="M56 74 Q60 80 64 74" stroke="#C45" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+
+        <div class="click-info">
+          <button id="bigClickBoost" class="pill">+1 click power (owned: <span id="clickPower">1</span>)</button>
+          <div class="tiny">Tap the cat or press <kbd>Space</kbd></div>
+        </div>
+      </section>
+
+      <aside class="shop">
+        <div class="shop-header">Shop</div>
+        <div id="shopList" class="shop-list">
+          <!-- Items injected by JS -->
+        </div>
+        <div class="controls">
+          <button id="saveBtn" class="btn">Save</button>
+          <button id="resetBtn" class="btn danger">Reset</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      Built for fun — host on GitHub Pages. Saved to your browser.
+    </footer>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
